@@ -1,6 +1,7 @@
-#Onilne Code Web App#
+# Onilne Code Web App
 add some information
-###Technologies:###
+
+### Technologies:
 - Frontend - React
 - Backend - Node.js, Express
 - Database - MongoDB
