@@ -1,0 +1,15 @@
+.Head {
+    background-color: lightblue; 
+    height: 40px;
+    border: solid 1px;
+}
+
+.c1, .c2, .c3 {
+    height: 40px;
+    border: solid 1px;
+}
+
+.ta {
+    width: 100%;
+    height: 500px;
+}

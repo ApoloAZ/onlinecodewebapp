@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom"
+import "./Lobby.css"
 
 export const Lobby = () => {
     return (
         <>
             <h1>Choose code block</h1>
             <Link to="/codeblock">
-               <div>async code</div>            
+               <div className="Case">async code</div>            
             </Link>
-            <div>sum 2 integers code</div>
-            <div>DFS code</div>
-            <div>event based code</div>
+            <div className="Case">sum 2 integers code</div>
+            <div className="Case">DFS code</div>
+            <div className="Case">event based code</div>
         </>
     )
 }
