@@ -1,0 +1,22 @@
+[
+    {
+        "title": "Hello World",
+        "current_code": "Enter your code here",
+        "solution_code": "console.log(\"Hello World\")"
+    },
+    {
+        "title": "sum 2 integers code",
+        "current_code": "Enter your code here",
+        "solution_code": "var x = 5\nvar y = 6\nconsole.log(x + y)"
+    },
+    {
+        "title": "DFS code",
+        "current_code": "Enter your code here",
+        "solution_code": "Complicated code"
+    },
+    {
+        "title": "event based code",
+        "current_code": "Enter your code here",
+        "solution_code": "Complicated code"
+    }
+]
