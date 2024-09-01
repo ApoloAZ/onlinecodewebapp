@@ -10,7 +10,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Lobby />} />
-          <Route path="/codeblock" element={<CodeBlock />} />
+          <Route path="/codeblock/:id" element={<CodeBlock />} />
           <Route path="/*" element={<NoPage />} />
         </Routes>
       </Router>

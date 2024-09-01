@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import axios from "axios"
 import { useState, useEffect } from "react"
 import "./CodeBlock.css"
@@ -6,18 +6,15 @@ import "./CodeBlock.css"
 export const CodeBlock = () => {
     axios.defaults.baseURL = "http://localhost:5000"
     const [codeblock, setCodeblock] = useState({title: "waiting for fetching the data from the server"})
+    const { id } = useParams()
 
     useEffect(() => {
-        console.log("hey")
-        axios.get(`/`)
+        axios.get(`/codeblock/${id}`)
         .then((res) => {
-            console.log(res)
             setCodeblock(res.data)
-            console.log(codeblock)
         }).catch((err) => {
             console.log(err)
         })
-        console.log("bye")
     }, [])
 
     const handleClick = () => {
@@ -33,7 +30,7 @@ export const CodeBlock = () => {
     const handleChange = (e) => {
         console.log(e)
         return setCodeblock((p) => {
-            return { ...p, currentCode: e.target.value}
+            return { ...p, current_code: e.target.value}
         }
     )}
 
@@ -43,10 +40,10 @@ export const CodeBlock = () => {
                 <span className="c1">properties:</span>
                 <span className="c2">{codeblock.title}</span>
                 <span className="c3">
-                    <Link to="/">return Lobby</Link>
+                    <Link to="/"><button>return Lobby</button></Link>
                 </span>
             </div>
-            <textarea className="ta" value={codeblock.currentCode} onChange={handleChange} />
+            <textarea className="ta" value={codeblock.current_code} onChange={handleChange} />
             <button onClick={handleClick}>send</button>
         </>
 

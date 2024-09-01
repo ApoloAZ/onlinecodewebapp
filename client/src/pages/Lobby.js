@@ -1,16 +1,30 @@
 import { Link } from "react-router-dom"
+import { useState, useEffect } from "react"
+import axios from "axios"
 import "./Lobby.css"
 
 export const Lobby = () => {
+    const [codeBlocks, setCodeBlocks] = useState([])
+    axios.defaults.baseURL = "http://localhost:5000"
+
+    useEffect(() => {
+            axios.get("/")
+            .then((res) => {
+                setCodeBlocks(res.data)
+            }).catch((err) => {
+                console.log(err)
+            })
+        }, [])
+
     return (
-        <>
-            <h1>Choose code block</h1>
-            <Link to="/codeblock">
-               <div className="Case">async code</div>            
-            </Link>
-            <div className="Case">sum 2 integers code</div>
-            <div className="Case">DFS code</div>
-            <div className="Case">event based code</div>
-        </>
+        <div>
+            <div className="headers">Choose code block</div>
+            {codeBlocks.map((codeBlock, index) => {
+                return (
+                    <Link key={index} to={`/codeblock/${codeBlock._id}`}>
+                        <div><button>{codeBlock.title}</button></div>
+                    </Link>
+                )})}
+        </div>
     )
 }

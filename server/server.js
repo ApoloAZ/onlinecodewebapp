@@ -25,19 +25,18 @@ connectDB()
 /* const a = new CodeBlock({title:"aaa", current_code:"bbb", solution_code:"ccc"})
 await a.save() */
 
-const d = async () => {
+app.get("/", async (req, res) => {
     const codeblocks = await CodeBlock.find()
-    return codeblocks
-}
+    console.log(codeblocks)
+    res.send(codeblocks)
+})
 
-const codeblocks = await d()
-console.log(codeblocks)
-
-app.get("/", (req, res) => {
+app.get("/codeblock/:id", async (req, res) => {
+    const codeblock = await CodeBlock.findById(req.params.id)
     res.send(codeblock)
 })
 
-app.put("/", (req, res) => {
+app.put("/codeblock/:id", (req, res) => {
     var data = req.body.codeblock
     res.send()
 })
