@@ -42,10 +42,10 @@ app.get("/codeblock/:id", async (req, res) => {
 io.on("connection", (socket) => {
     console.log(`a user connected ${socket.id}`)
     if (numOfParticipants === 0) {
-        socket.emit("updateRole", "Mentor")
+        socket.emit("updateRole", true)
     }
     else {
-        socket.emit("updateRole", "Student")       
+        socket.emit("updateRole", false)       
     }
     numOfParticipants++
     /* console.log(numOfParticipants) */

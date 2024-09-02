@@ -1,18 +1,20 @@
-import { Link, useParams, useNavigate } from "react-router-dom"
+import { Link, useParams} from "react-router-dom"
 import axios from "axios"
 import { useState, useEffect, useRef } from "react"
 import "./CodeBlock.css"
 import io from "socket.io-client"
+import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Heading, Flex, Box, Spacer } from '@chakra-ui/react'
+import Editor from '@monaco-editor/react';
 
 
 export const CodeBlock = () => {
     axios.defaults.baseURL = "http://localhost:5000"
     const [codeblock, setCodeblock] = useState({title: "waiting for fetching the data from the server"})
-    const [role, setRole] = useState("")
+    const [isMentor, setIsMentor] = useState(false)
     const [numOfParticipants, setNumOfParticipants] = useState(0)
     const { id } = useParams()
     const socket = useRef(null)
-    const nevigate = useNavigate()
     
     useEffect(() => {
         axios.get(`/codeblock/${id}`)
@@ -42,9 +44,10 @@ export const CodeBlock = () => {
         })
 
         socket.current.on("updateRole", (data) => {
-            console.log(data)
-            setRole(data)
+            setIsMentor(data)
         })
+
+        //socket.currect.on("")
 
 /*         socket.current.on("mentorLeftTheCodeBlock", () => {
             nevigate('/')
@@ -56,27 +59,37 @@ export const CodeBlock = () => {
             socket.current.off("updateCurrentCode")
             socket.current.off("updateNumOfParticipents")
             socket.current.off("updateRole")
-            socket.current.disconnect(role)
+            socket.current.disconnect()
         }
     }, [])
 
-    const handleChange = (e) => {
-        socket.current.emit("updatedCode", {id: id, current_code: e.target.value})
+    const handleChange = (value) => {
+        if (codeblock.solution_code === value) {
+            alert("\uD83D\uDE00")
+        }
+        console.log(value)
+        socket.current.emit("updatedCode", {id: id, current_code: value})
         return setCodeblock((p) => {
-            return { ...p, current_code: e.target.value}
+            return { ...p, current_code: value}
         }
     )}
 
     return (
         <>
-            <div className="Head">
-                <span className="c1">participants:{`${numOfParticipants} | ${role}`}</span>
-                <span className="c2">{codeblock.title}</span>
-                <span className="c3">
-                    <Link to="/"><button>return Lobby</button></Link>
-                </span>
-            </div>
-            <textarea className="ta" value={codeblock.current_code} readOnly={role === "Mentor"} onChange={handleChange} />
+            <Flex minWidth='max-content' alignItems='center' gap='2'>
+                <Box p='2'>
+                    <Heading size='md'>{codeblock.title}</Heading>
+                </Box>
+                <Spacer />
+                <ButtonGroup gap='2'>
+                    <Button colorScheme='teal'>Participants:<br />{numOfParticipants}</Button>
+                    <Button colorScheme='teal'>Role:<br />{isMentor ? "Mentor [ReadOnly]" : "Student [Editable]"}</Button>
+                    <Link to="/"><Button colorScheme='teal'>return Lobby</Button></Link>
+                </ButtonGroup>
+            </Flex>
+            <Box mt="10px">
+                <Editor height="75vh" defaultLanguage="javascript" value={codeblock.current_code} onChange={handleChange} options={{ readOnly:isMentor }}/>
+            </Box>
         </>
     )
 }

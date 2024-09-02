@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 import axios from "axios"
-import "./Lobby.css"
+import { Heading, Button } from '@chakra-ui/react'
 
 export const Lobby = () => {
     const [codeBlocks, setCodeBlocks] = useState([])
@@ -18,11 +18,13 @@ export const Lobby = () => {
 
     return (
         <div>
-            <div className="headers">Choose code block</div>
+            <Heading size='lg' mb='10px' mt='10px'>Choose code block</Heading>
             {codeBlocks.map((codeBlock, index) => {
                 return (
                     <Link key={index} to={`/codeblock/${codeBlock._id}`}>
-                        <div><button>{codeBlock.title}</button></div>
+                        <div>
+                            <Button colorScheme='teal' mb='10px'>{codeBlock.title}</Button>
+                        </div>
                     </Link>
                 )})}
         </div>
