@@ -41,24 +41,25 @@ app.get("/codeblock/:id", async (req, res) => {
 
 io.on("connection", (socket) => {
     console.log(`a user connected ${socket.id}`)
-    if (numOfParticipants === 0) {
-        socket.emit("updateRole", true)
-    }
-    else {
-        socket.emit("updateRole", false)       
-    }
+    socket.emit("updateRole", (numOfParticipants === 0))
     numOfParticipants++
-    /* console.log(numOfParticipants) */
 
     io.emit("updateNumOfParticipents", numOfParticipants)
 
     socket.on("updatedCode", (data) => {
+        (data.current_code === data.solution_code) && io.emit("itsAMatch") && console.log("matchhhh")
         CodeBlock.findByIdAndUpdate(data.id, {current_code: data.current_code})
         .then((res) => {
             socket.broadcast.emit("updateCurrentCode", data)
         }).catch((err) => {
             console.log(err)
         })
+    })
+
+    socket.on("exit", (data) => {
+        if (data) {
+            io.emit("releaseStudent")
+        }
     })
 
 /*     socket.on("mentorGone", (role) => {

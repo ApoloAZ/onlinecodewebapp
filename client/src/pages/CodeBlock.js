@@ -1,10 +1,9 @@
-import { Link, useParams} from "react-router-dom"
+import { Link, useParams, useNavigate} from "react-router-dom"
 import axios from "axios"
 import { useState, useEffect, useRef } from "react"
-import "./CodeBlock.css"
 import io from "socket.io-client"
 import { Button, ButtonGroup } from '@chakra-ui/react'
-import { Heading, Flex, Box, Spacer } from '@chakra-ui/react'
+import { Heading, Flex, Box, Spacer, Image } from '@chakra-ui/react'
 import Editor from '@monaco-editor/react';
 
 
@@ -12,9 +11,11 @@ export const CodeBlock = () => {
     axios.defaults.baseURL = "http://localhost:5000"
     const [codeblock, setCodeblock] = useState({title: "waiting for fetching the data from the server"})
     const [isMentor, setIsMentor] = useState(false)
+    const [isMatch, setIsMatch] = useState(false)
     const [numOfParticipants, setNumOfParticipants] = useState(0)
     const { id } = useParams()
     const socket = useRef(null)
+    const navigate = useNavigate()
     
     useEffect(() => {
         axios.get(`/codeblock/${id}`)
@@ -44,35 +45,39 @@ export const CodeBlock = () => {
         })
 
         socket.current.on("updateRole", (data) => {
-            setIsMentor(data)
+            setIsMentor(data) 
         })
 
-        //socket.currect.on("")
+        socket.current.on("itsAMatch", () => {
+            console.log("MATCHHHH")
+            setIsMatch(true)
+        })
 
-/*         socket.current.on("mentorLeftTheCodeBlock", () => {
-            nevigate('/')
-        }) */
+        socket.current.on("releaseStudent", () => {
+            navigate("/")
+        })
 
-        return () => {
-/*             console.log(role)
-            socket.current.emit("mentorGone", role) */
+        return async () => {
             socket.current.off("updateCurrentCode")
             socket.current.off("updateNumOfParticipents")
             socket.current.off("updateRole")
+             socket.current.off("releaseStudent")
             socket.current.disconnect()
         }
     }, [])
 
     const handleChange = (value) => {
-        if (codeblock.solution_code === value) {
-            alert("\uD83D\uDE00")
-        }
-        console.log(value)
-        socket.current.emit("updatedCode", {id: id, current_code: value})
+        socket.current.emit("updatedCode", {id: id, current_code: value, solution_code: codeblock.solution_code})
         return setCodeblock((p) => {
             return { ...p, current_code: value}
         }
     )}
+
+    const handleExit = (value) => {
+        console.log(value)
+        socket.current.emit("exit", isMentor)
+        navigate("/")
+        }
 
     return (
         <>
@@ -84,12 +89,14 @@ export const CodeBlock = () => {
                 <ButtonGroup gap='2'>
                     <Button colorScheme='teal'>Participants:<br />{numOfParticipants}</Button>
                     <Button colorScheme='teal'>Role:<br />{isMentor ? "Mentor [ReadOnly]" : "Student [Editable]"}</Button>
-                    <Link to="/"><Button colorScheme='teal'>return Lobby</Button></Link>
+                    <Link to="/"><Button colorScheme='teal' onClick={handleExit}>return Lobby</Button></Link>
                 </ButtonGroup>
             </Flex>
             <Box mt="10px">
-                <Editor height="75vh" defaultLanguage="javascript" value={codeblock.current_code} onChange={handleChange} options={{ readOnly:isMentor }}/>
+                {isMatch ? <Image src="https://www.kids-world.org.il/wp-content/uploads/Smiley-0018.jpg"/> :
+                        <Editor height="75vh" defaultLanguage="javascript" value={codeblock.current_code} onChange={handleChange} options={{ readOnly:isMentor }}/>}
             </Box>
+
         </>
     )
 }
