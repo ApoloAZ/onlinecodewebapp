@@ -1,14 +1,17 @@
 import express from "express"
 import dotenv from "dotenv"
-import http from "http"
+import { createServer } from "node:http"
 import cors from "cors"
 import mongoose from "mongoose"
 import { CodeBlock } from "./model/CodeBlock.js"
+import { Server } from "socket.io"
 
 dotenv.config()
 const app = express()
 app.use(cors())
 app.use(express.json())
+const server = createServer(app)
+const io = new Server(server, {cors: {origin:"http://localhost:3000"}}) //maybe add additional info - origin: url for client
 
 const connectDB = async () => {
     try {
@@ -27,7 +30,6 @@ await a.save() */
 
 app.get("/", async (req, res) => {
     const codeblocks = await CodeBlock.find()
-    console.log(codeblocks)
     res.send(codeblocks)
 })
 
@@ -36,11 +38,23 @@ app.get("/codeblock/:id", async (req, res) => {
     res.send(codeblock)
 })
 
-app.put("/codeblock/:id", (req, res) => {
+/* app.put("/codeblock/:id", (req, res) => {
     var data = req.body.codeblock
     res.send()
+}) */
+
+io.on("connection", (socket) => {
+    console.log(`a user connected ${socket.id}`)
+
+    socket.on("updatedCode", (data) => {
+        socket.broadcast.emit("updateCurrentCode", data)
+    })
+
+    socket.on("disconnect", () => {
+        console.log("user disconnected")
+    })
 })
 
-http.createServer(app).listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
     console.log(`server running at http://localhost:${process.env.PORT}`)
 })

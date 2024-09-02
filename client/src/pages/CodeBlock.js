@@ -1,13 +1,23 @@
 import { Link, useParams } from "react-router-dom"
 import axios from "axios"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import "./CodeBlock.css"
+import io from "socket.io-client"
+const socket = io.connect("http://localhost:5000")
 
 export const CodeBlock = () => {
     axios.defaults.baseURL = "http://localhost:5000"
     const [codeblock, setCodeblock] = useState({title: "waiting for fetching the data from the server"})
     const { id } = useParams()
 
+    useEffect(() => {
+        socket.on("updateCurrentCode", (data) => {
+            return setCodeblock((p) => {
+                return { ...p, current_code: data.current_code}
+            })
+        })
+    }, [socket])
+  
     useEffect(() => {
         axios.get(`/codeblock/${id}`)
         .then((res) => {
@@ -28,6 +38,7 @@ export const CodeBlock = () => {
     }
 
     const handleChange = (e) => {
+        socket.emit("updatedCode", {current_code: e.target.value})
         console.log(e)
         return setCodeblock((p) => {
             return { ...p, current_code: e.target.value}
