@@ -13,7 +13,7 @@ app.use(cors())
 app.use(express.json())
 const server = createServer(app)
 const io = new Server(server, {cors: {origin:"http://localhost:3000"}})
-const codeBlocksSessions = {}
+var codeblock = null
 var numOfParticipants = 0
 
 
@@ -35,7 +35,8 @@ app.get("/", async (req, res) => {
 })
 
 app.get("/codeblock/:id", async (req, res) => {
-    const codeblock = await CodeBlock.findById(req.params.id)
+    codeblock = codeblock ?? await CodeBlock.findById(req.params.id)
+    console.log(codeblock)
     res.send(codeblock)
 })
 
@@ -47,18 +48,15 @@ io.on("connection", (socket) => {
     io.emit("updateNumOfParticipents", numOfParticipants)
 
     socket.on("updatedCode", (data) => {
-        (data.current_code === data.solution_code) && io.emit("itsAMatch") && console.log("matchhhh")
-        CodeBlock.findByIdAndUpdate(data.id, {current_code: data.current_code})
-        .then((res) => {
-            socket.broadcast.emit("updateCurrentCode", data)
-        }).catch((err) => {
-            console.log(err)
-        })
+        (data.current_code.replace(/\r\n/g, "\n") === codeblock.solution_code) && io.emit("itsAMatch");
+        socket.broadcast.emit("updateCurrentCode", data)
+        codeblock.current_code = data.current_code
     })
 
     socket.on("exit", (data) => {
         if (data) {
             io.emit("releaseStudent")
+            codeblock = null 
         }
     })
 
@@ -72,12 +70,3 @@ io.on("connection", (socket) => {
 server.listen(process.env.PORT, () => {
     console.log(`server running at http://localhost:${process.env.PORT}`)
 })
-
-
-/* const a = new CodeBlock({title:"aaa", current_code:"bbb", solution_code:"ccc"})
-await a.save() */
-
-/* app.put("/codeblock/:id", (req, res) => {
-    var data = req.body.codeblock
-    res.send()
-}) */

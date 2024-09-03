@@ -6,9 +6,6 @@ const codeBlockModel = new Schema(
         current_code: {type:String},
         solution_code: {type:String}
     },
-    {
-        timestamps: true
-    }
 )
 
 export const CodeBlock = model("CodeBlock", codeBlockModel)

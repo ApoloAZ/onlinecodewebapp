@@ -1,22 +1,28 @@
 [
+	{
+
+	  "title": "Hello World",
+	  "current_code": "/*Enter code that prints to the console - \"Hello World\"\nNote: You should delete the whole comment before starting codeing",
+	  "solution_code": "console.log(\"Hello World\")"
+	},
     {
-        "title": "Hello World",
-        "current_code": "Enter your code here",
-        "solution_code": "console.log(\"Hello World\")"
+        "title": "Addition of Two Numbers",
+        "current_code": "/*let a = 5;\nlet b = 3;\nNote: You should delete the whole comment before starting codeing*/",
+        "solution_code": "let sum = a + b;\nconsole.log(sum);"
     },
     {
-        "title": "sum 2 integers code",
-        "current_code": "Enter your code here",
-        "solution_code": "var x = 5\nvar y = 6\nconsole.log(x + y)"
+        "title": "Check Even or Odd",
+        "current_code": "/*let number = 4;\nNote: You should delete the whole comment before starting codeing*/",
+        "solution_code": "if (number % 2 === 0) {\n    console.log(\"Even\");\n} else {\n    console.log(\"Odd\");\n}"
     },
     {
-        "title": "DFS code",
-        "current_code": "Enter your code here",
-        "solution_code": "Complicated code"
+        "title": "Find Maximum of Two Numbers",
+        "current_code": "/*let x = 10;\nlet y = 20;\nNote: You should delete the whole comment before starting codeing*/",
+        "solution_code": "let max = (x > y) ? x : y;\nconsole.log(max);"
     },
     {
-        "title": "event based code",
-        "current_code": "Enter your code here",
-        "solution_code": "Complicated code"
+        "title": "Reverse a String",
+        "current_code": "/*let str = \"hello\";\nNote: You should delete the whole comment before starting codeing*/",
+        "solution_code": "let reversed = str.split('').reverse().join('');\nconsole.log(reversed);"
     }
 ]
