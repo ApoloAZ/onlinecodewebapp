@@ -62,19 +62,10 @@ io.on("connection", (socket) => {
         }
     })
 
-/*     socket.on("mentorGone", (role) => {
-        console.log("Iamhere")
-        if (role === "Mentor") {
-            io.emit("mentorLeftTheCodeBlock")
-        }
-    }) */
-
     socket.on("disconnect", () => {
         console.log("user disconnected")
         numOfParticipants--
         io.emit("updateNumOfParticipents", numOfParticipants)
-/*      console.log(numOfParticipants)
-        socket.emit("reduceNumOfParticipents", numOfParticipants) */
     })
 })
 

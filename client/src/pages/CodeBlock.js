@@ -3,7 +3,7 @@ import axios from "axios"
 import { useState, useEffect, useRef } from "react"
 import io from "socket.io-client"
 import { Button, ButtonGroup } from '@chakra-ui/react'
-import { Heading, Flex, Box, Spacer, Image } from '@chakra-ui/react'
+import { Heading, Flex, Box, Spacer, Image, Center } from '@chakra-ui/react'
 import Editor from '@monaco-editor/react';
 
 
@@ -40,16 +40,15 @@ export const CodeBlock = () => {
         })
 
         socket.current.on("updateNumOfParticipents", (data) => {
-            console.log(data)
             setNumOfParticipants(data)
         })
 
         socket.current.on("updateRole", (data) => {
+            console.log(data)
             setIsMentor(data) 
         })
 
         socket.current.on("itsAMatch", () => {
-            console.log("MATCHHHH")
             setIsMatch(true)
         })
 
@@ -61,12 +60,14 @@ export const CodeBlock = () => {
             socket.current.off("updateCurrentCode")
             socket.current.off("updateNumOfParticipents")
             socket.current.off("updateRole")
-             socket.current.off("releaseStudent")
+            socket.current.off("releaseStudent")
+            socket.current.off("itsAMatch")
             socket.current.disconnect()
         }
     }, [])
 
-    const handleChange = (value) => {
+    const handleChange = (value, event) => {
+        console.log(value)
         socket.current.emit("updatedCode", {id: id, current_code: value, solution_code: codeblock.solution_code})
         return setCodeblock((p) => {
             return { ...p, current_code: value}
@@ -92,11 +93,9 @@ export const CodeBlock = () => {
                     <Link to="/"><Button colorScheme='teal' onClick={handleExit}>return Lobby</Button></Link>
                 </ButtonGroup>
             </Flex>
-            <Box mt="10px">
-                {isMatch ? <Image src="https://www.kids-world.org.il/wp-content/uploads/Smiley-0018.jpg"/> :
-                        <Editor height="75vh" defaultLanguage="javascript" value={codeblock.current_code} onChange={handleChange} options={{ readOnly:isMentor }}/>}
-            </Box>
-
+            <Center mt="10px">
+                <Editor height="75vh" defaultLanguage="javascript" options={{readOnly:isMentor}} value={codeblock.current_code} onChange={handleChange}/>}
+            </Center>
         </>
     )
 }
