@@ -5,6 +5,8 @@ import io from 'socket.io-client';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { Heading, Flex, Box, Spacer, Image, Center } from '@chakra-ui/react';
 import Editor from '@monaco-editor/react';
+import CodeMirror from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript'
 
 
 const CodeBlock = () => {
@@ -84,12 +86,13 @@ const CodeBlock = () => {
 
   return (
     <>
-      <Flex minWidth='max-content' alignItems='center' gap='2'>
-        <Box p='2'>
+      <Flex minWidth='max-content' bg='gray.100' alignItems='center' gap='2' t='10px'>
+        <Image boxSize='40px' borderRadius='5px' ml='10px' src='https://i.ibb.co/mJrHwFg/logo.jpg'/>
+        <Box p='3'>
           <Heading size='md'>{codeblock.title}</Heading>
         </Box>
         <Spacer />
-        <ButtonGroup gap='2'>
+        <ButtonGroup gap='2' mr='10px'>
           <Button colorScheme='teal'>Participants:<br />{numOfParticipants}</Button>
           <Button colorScheme='teal'>Role:<br />
             {isMentor
@@ -102,19 +105,25 @@ const CodeBlock = () => {
           </Link>
         </ButtonGroup>
       </Flex>
-      <Center mt='10px'>
-        {isMatch
-        ? <>
-            <Image src='https://www.kids-world.org.il/wp-content/uploads/Smiley-0018.jpg'/>
-            <div>
-              <Button colorScheme='teal' onClick={() => setIsMatch(false)}>return to CodeBlock</Button>
-            </div>
-          </>
-        : <Editor height='75vh' defaultLanguage='javascript' options={{readOnly:isMentor}} value={codeblock.currentCode} onChange={handleChange}/>
-        }
+      <Center>
+        <Box>
+          {isMatch
+          ? <>
+              <div>
+                <Button colorScheme='teal' onClick={() => setIsMatch(false)}>return to CodeBlock</Button>
+              </div>
+              <div>
+              <Image mt='20px' src='https://www.kids-world.org.il/wp-content/uploads/Smiley-0018.jpg'/>
+              </div>
+            </>
+          : <CodeMirror value={codeblock.currentCode} width='200vh' height='200px' editable={!isMentor} theme='dark' extensions={[javascript({ jsx: true })]} onChange={handleChange} />
+          }
+        </Box>
       </Center>
     </>
   );
 }
 
 export default CodeBlock;
+
+//        : <Editor height='75vh' bg='gray.100' defaultLanguage='javascript' options={{readOnly:isMentor}} value={codeblock.currentCode} onChange={handleChange}/>
