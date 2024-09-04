@@ -1,7 +1,7 @@
 <h1 align="center"> Online Code Web App </h1> <br>
 <p align="center">
   <a>
-    <img alt="OnlineCodeWebApp" title="Online Code Web App" src="https://github.com/ApoloAZ/onlinecodewebapp/blob/main/client/public/pikaso_texttoimage_-logo-for-javascript-code-sharing-app-for-teacher-.jpeg" width="450">
+    <img alt="OnlineCodeWebApp" title="Online Code Web App" src="https://github.com/ApoloAZ/onlinecodewebapp/blob/main/client/public/logo.jpg">
   </a>
 </p>
 
@@ -27,9 +27,9 @@ An interactive tool that facilitates collaborative coding between mentors and st
 
 A few of the things you can do with Online Code Web App:
 
-* add some feature
-* add some feature
-* add some feature
+* Choose from a variety of rooms designed for JavaScript coding
+* Real-time collaborative editing
+* Syntax highlighting for enhanced code readability
 
 ## Technologies
 
@@ -40,8 +40,8 @@ This real-time JavaScript collaboration app leverages a robust tech stack to emp
 * **Database**: MongoDB - offering a flexible and document-oriented data storage solution.
 * **Real-Time Communication**: Socket.io - enabling instant code synchronization and collaboration.
 * **Styling**: Chakra UI - creating a beautiful and customizable user experience.
-* **Code Editing**: monaco-editor/react - integrating a powerful and familiar code editing experience.
+* **Code Editing**: uiw/react-codemirror - integrating a powerful and familiar code editing experience.
 
 ## Lets try it
-Follow this link to begin your app experience --link enter here--
+Follow this [link](https://onlinecodewebapp.netlify.app/) to begin your app experience
 
