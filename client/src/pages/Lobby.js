@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Heading, Button } from '@chakra-ui/react';
-import { Box, Container, Flex, AbsoluteCenter, Center, Image } from '@chakra-ui/react';
+import { Box, Flex, Center, Image } from '@chakra-ui/react';
 
 const Lobby = () => {
   const [codeBlocks, setCodeBlocks] = useState([]);
@@ -18,7 +18,7 @@ const Lobby = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{backgroundColor:'gray.100'}}>
       <Flex w='100%' h='100vh'>
         <Center bg='gray.100' w='65%' color='black'>
           <div>

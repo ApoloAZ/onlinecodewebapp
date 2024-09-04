@@ -35,7 +35,9 @@ io.on('connection', (socket) => {
   io.emit('updateNumOfParticipents', numOfParticipants);
 
   socket.on('updateCodeInServer', (data) => {
-    (data.currentCode.replace(/\r\n/g, "\n") === codeBlock.solutionCode) && io.emit('updateIsMatch');
+    console.log(data.currentCode);
+    console.log(codeBlock.solutionCode);
+    (data.currentCode === codeBlock.solutionCode) && io.emit('updateIsMatch');
     socket.broadcast.emit('updateCodeInClient', data);
     codeBlock.currentCode = data.currentCode;
   });
