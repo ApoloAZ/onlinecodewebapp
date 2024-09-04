@@ -3,9 +3,10 @@ import { Schema, model } from "mongoose"
 const codeBlockModel = new Schema(
     {
         title: {type:String},
-        current_code: {type:String},
-        solution_code: {type:String}
+        currentCode: {type:String},
+        solutionCode: {type:String}
     },
 )
 
-export const CodeBlock = model("CodeBlock", codeBlockModel)
+const CodeBlock = model("CodeBlock", codeBlockModel)
+export default CodeBlock;
