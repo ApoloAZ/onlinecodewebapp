@@ -21,7 +21,7 @@
 
 ## Introduction
 
-Add later intro information
+An interactive tool that facilitates collaborative coding between mentors and students, ideal for remote learning scenarios
 
 ## Features
 
