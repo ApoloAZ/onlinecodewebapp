@@ -86,6 +86,7 @@ const CodeBlock = () => {
 
   return (
     <>
+    <Box bg='gray.100' w='100vw' h='100vh'>
       <Flex minWidth='max-content' bg='gray.100' alignItems='center' gap='2' t='10px'>
         <Image boxSize='40px' borderRadius='5px' ml='10px' src='https://i.ibb.co/mJrHwFg/logo.jpg'/>
         <Box p='3'>
@@ -93,8 +94,8 @@ const CodeBlock = () => {
         </Box>
         <Spacer />
         <ButtonGroup gap='2' mr='10px'>
-          <Button colorScheme='teal'>Participants:<br />{numOfParticipants}</Button>
-          <Button colorScheme='teal'>Role:<br />
+          <Button colorScheme='teal'>Participants<br />{numOfParticipants}</Button>
+          <Button colorScheme='teal'>Role<br />
             {isMentor
             ? 'Mentor [ReadOnly]'
             : 'Student [Editable]'
@@ -105,7 +106,7 @@ const CodeBlock = () => {
           </Link>
         </ButtonGroup>
       </Flex>
-      <Center>
+      <Center bg='gray.100'>
         <Box>
           {isMatch
           ? <>
@@ -113,13 +114,24 @@ const CodeBlock = () => {
                 <Button colorScheme='teal' onClick={() => setIsMatch(false)}>return to CodeBlock</Button>
               </div>
               <div>
-              <Image mt='20px' src='https://www.kids-world.org.il/wp-content/uploads/Smiley-0018.jpg'/>
+              <Image boxSize="30vw" mt='20px' src='https://www.kids-world.org.il/wp-content/uploads/Smiley-0018.jpg' alt='Good Job!'/>
               </div>
             </>
-          : <CodeMirror value={codeblock.currentCode} width='200vh' height='200px' editable={!isMentor} theme='dark' extensions={[javascript({ jsx: true })]} onChange={handleChange} />
+          : <CodeMirror
+               style= {{textAlign:"left"}}
+                value={codeblock.currentCode}
+                 minWidth='100vw'
+                  maxWidth='100vw'
+                   minHeight='93vh'
+                    maxHeight='93vh'
+                     editable={!isMentor}
+                      theme='dark'
+                       extensions={[javascript({ jsx: true })]}
+                        onChange={handleChange} />
           }
         </Box>
       </Center>
+    </Box>
     </>
   );
 }
