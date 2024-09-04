@@ -44,7 +44,6 @@ export const CodeBlock = () => {
         })
 
         socket.current.on("updateRole", (data) => {
-            console.log(data)
             setIsMentor(data) 
         })
 
@@ -66,7 +65,7 @@ export const CodeBlock = () => {
         }
     }, [])
 
-    const handleChange = (value, event) => {
+    const handleChange = (value) => {
         console.log(value)
         socket.current.emit("updatedCode", {id: id, current_code: value, solution_code: codeblock.solution_code})
         return setCodeblock((p) => {
@@ -94,7 +93,14 @@ export const CodeBlock = () => {
                 </ButtonGroup>
             </Flex>
             <Center mt="10px">
-                <Editor height="75vh" defaultLanguage="javascript" options={{readOnly:isMentor}} value={codeblock.current_code} onChange={handleChange}/>}
+                {isMatch ?
+                <>
+                    <Image src="https://www.kids-world.org.il/wp-content/uploads/Smiley-0018.jpg"/>
+                    <div>
+                        <Button colorScheme='teal' onClick={() => setIsMatch(false)}>return to CodeBlock</Button>
+                    </div>
+                </> :
+                 <Editor height="75vh" defaultLanguage="javascript" options={{readOnly:isMentor}} value={codeblock.current_code} onChange={handleChange}/>}
             </Center>
         </>
     )
