@@ -7,6 +7,7 @@ import { Box, Flex, Center, Image } from '@chakra-ui/react';
 const Lobby = () => {
   const [codeBlocks, setCodeBlocks] = useState([]);
   axios.defaults.baseURL = 'http://localhost:5000';
+  //'https://onlinecodewebapp.onrender.com';
 
   useEffect(() => {
     axios.get('/')
@@ -26,16 +27,16 @@ const Lobby = () => {
             <Heading size='lg' align='left' mb='15px' mt='10px'>Choose code block</Heading>
             <Box align='left'>
               {
-                  codeBlocks.map((codeBlock, index) => {
-                    return (
-                      <Link key={index} to={`/codeblock/${codeBlock._id}`}>
-                        <div>
-                          <Button colorScheme='teal' mb='10px'>{codeBlock.title}</Button>
-                        </div>
-                      </Link>
-                    )
-                  })
-                }
+                codeBlocks.map((codeBlock, index) => {
+                  return (
+                    <Link key={index} to={`/codeblock/${codeBlock._id}`}>
+                      <div>
+                        <Button colorScheme='teal' mb='10px'>{codeBlock.title}</Button>
+                      </div>
+                    </Link>
+                  )
+                })
+              }
             </Box>
           </div>
         </Center>

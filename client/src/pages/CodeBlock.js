@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { Heading, Flex, Box, Spacer, Image, Center } from '@chakra-ui/react';
-import Editor from '@monaco-editor/react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript'
 
@@ -13,11 +12,13 @@ const CodeBlock = () => {
   const [codeblock, setCodeblock] = useState({title: 'Fetching the data from the server...'});
   const [isMentor, setIsMentor] = useState(false);
   const [isMatch, setIsMatch] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const [numOfParticipants, setNumOfParticipants] = useState(0);
   const { id } = useParams();
   const socket = useRef(null);
   const navigate = useNavigate();
   axios.defaults.baseURL = 'http://localhost:5000';
+  //https://onlinecodewebapp.onrender.com
     
   useEffect(() => {
     axios.get(`/codeblock/${id}`)
@@ -94,6 +95,7 @@ const CodeBlock = () => {
         </Box>
         <Spacer />
         <ButtonGroup gap='2' mr='10px'>
+          <Button colorScheme='teal' onClick={() => setIsDark(!isDark)}>switch to<br />{isDark ? 'Light' : 'Dark'} Theme</Button>
           <Button colorScheme='teal'>Participants<br />{numOfParticipants}</Button>
           <Button colorScheme='teal'>Role<br />
             {isMentor
@@ -125,7 +127,10 @@ const CodeBlock = () => {
                    minHeight='93vh'
                     maxHeight='93vh'
                      editable={!isMentor}
-                      theme='dark'
+                      theme={isDark 
+                             ? 'dark'
+                             : 'light'
+                      }
                        extensions={[javascript({ jsx: true })]}
                         onChange={handleChange} />
           }
