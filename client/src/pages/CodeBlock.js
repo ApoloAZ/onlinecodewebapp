@@ -5,11 +5,11 @@ import io from 'socket.io-client';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { Heading, Flex, Box, Spacer, Image, Center } from '@chakra-ui/react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript'
+import { javascript } from '@codemirror/lang-javascript';
 
 
 const CodeBlock = () => {
-  const [codeblock, setCodeblock] = useState({title: 'Fetching the data from the server...'});
+  const [codeblock, setCodeblock] = useState({title: 'Fetching data from server...'});
   const [isMentor, setIsMentor] = useState(false);
   const [isMatch, setIsMatch] = useState(false);
   const [isDark, setIsDark] = useState(true);
@@ -27,39 +27,38 @@ const CodeBlock = () => {
     }).catch((err) => {
       console.log(err);
     });
-  }, [])
+  }, []);
 
   useEffect(() => {
 
     socket.current = io.connect(axios.defaults.baseURL, {
-      withCredentials: true,
       transports: ['websocket']
     });
 
-    socket.current.on('updateCodeInClient', (codeBlockServer) => {
+    socket.current.on('updateCodeBlock', (codeBlockServer) => {
       return setCodeblock((prev) => {
         return { ...prev, currentCode: codeBlockServer.currentCode};
       });
     });
 
     socket.current.on('updateNumOfParticipents', (numOfParticipantsServer) => {
-      setNumOfParticipants(numOfParticipantsServer)
+      setNumOfParticipants(numOfParticipantsServer);
     });
 
     socket.current.on('updateRole', (isMentorServer) => {
-      setIsMentor(isMentorServer) 
+      setIsMentor(isMentorServer) ;
     });
 
     socket.current.on('updateIsMatch', () => {
-      setIsMatch(true)
+      setIsMatch(true);
     });
 
     socket.current.on('releaseClient', () => {
-      navigate('/')
+      navigate('/');
     });
 
     return async () => {
-      socket.current.off('updateCodeInClient');
+      socket.current.off('updateCodeBlock');
       socket.current.off('updateNumOfParticipents');
       socket.current.off('updateRole');
       socket.current.off('updateIsMatch');
@@ -68,8 +67,9 @@ const CodeBlock = () => {
     }
   }, []);
 
+  // The logic when the code in the code editor changes
   const handleChange = (value) => {
-    socket.current.emit('updateCodeInServer', {
+    socket.current.emit('codeBlockChanged', {
       id: id,
       currentCode: value,
       solutionCode: codeblock.solutionCode
@@ -79,68 +79,68 @@ const CodeBlock = () => {
     });
   }
 
+  // The logic when a user leaves the room by pressing a button "return Lobby"
   const handleExit = (value) => {
-    console.log(value);
     socket.current.emit('exitCodeBlock', isMentor);
     navigate('/');
   }
 
   return (
     <>
-    <Box bg='gray.100' w='100vw' h='100vh'>
-      <Flex minWidth='max-content' bg='gray.100' alignItems='center' gap='2' t='10px'>
-        <Image boxSize='40px' borderRadius='5px' ml='10px' src='https://i.ibb.co/mJrHwFg/logo.jpg'/>
-        <Box p='3'>
-          <Heading size='md'>{codeblock.title}</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap='2' mr='10px'>
-          <Button colorScheme='teal' onClick={() => setIsDark(!isDark)}>switch to<br />{isDark ? 'Light' : 'Dark'} Theme</Button>
-          <Button colorScheme='teal'>Participants<br />{numOfParticipants}</Button>
-          <Button colorScheme='teal'>Role<br />
-            {isMentor
-            ? 'Mentor [ReadOnly]'
-            : 'Student [Editable]'
+      <Box bg='gray.100' w='100vw' h='100vh'>
+        <Flex minWidth='max-content' bg='gray.100' alignItems='center' gap='2' t='10px'>
+          <Image boxSize='40px' borderRadius='5px' ml='10px' src='/logo.jpg'/>
+          <Box p='3'>
+            <Heading size='md'>{codeblock.title}</Heading>
+          </Box>
+          <Spacer />
+          <ButtonGroup gap='2' mr='10px'>
+            <Button colorScheme='teal' onClick={() => setIsDark(!isDark)}>switch to
+              <br />{isDark ? 'Light' : 'Dark'} Theme</Button>
+            <Button colorScheme='teal'>Participants<br />{numOfParticipants}</Button>
+            <Button colorScheme='teal'>Role<br />
+              {isMentor
+              ? 'Mentor [ReadOnly]'
+              : 'Student [Editable]'
+              }
+            </Button>
+            <Link to='/'>
+              <Button colorScheme='teal' onClick={handleExit}>return Lobby</Button>
+            </Link>
+          </ButtonGroup>
+        </Flex>
+        <Center bg='gray.100'>
+          <Box>
+            {isMatch
+            ? <>
+                <div>
+                  <Button colorScheme='teal' onClick={() => setIsMatch(false)}>
+                    return to CodeBlock</Button>
+                </div>
+                <div>
+                <Image boxSize="30vw" mt='20px' src='/smiley.jpg' alt='Good Job!'/>
+                </div>
+              </>
+            : <CodeMirror
+                style= {{textAlign:"left"}}
+                  value={codeblock.currentCode}
+                  minWidth='100vw'
+                    maxWidth='100vw'
+                    minHeight='93vh'
+                      maxHeight='93vh'
+                      editable={!isMentor}
+                        theme={isDark 
+                              ? 'dark'
+                              : 'light'
+                        }
+                        extensions={[javascript({ jsx: true })]}
+                          onChange={handleChange} />
             }
-          </Button>
-          <Link to='/'>
-            <Button colorScheme='teal' onClick={handleExit}>return Lobby</Button>
-          </Link>
-        </ButtonGroup>
-      </Flex>
-      <Center bg='gray.100'>
-        <Box>
-          {isMatch
-          ? <>
-              <div>
-                <Button colorScheme='teal' onClick={() => setIsMatch(false)}>return to CodeBlock</Button>
-              </div>
-              <div>
-              <Image boxSize="30vw" mt='20px' src='https://www.kids-world.org.il/wp-content/uploads/Smiley-0018.jpg' alt='Good Job!'/>
-              </div>
-            </>
-          : <CodeMirror
-               style= {{textAlign:"left"}}
-                value={codeblock.currentCode}
-                 minWidth='100vw'
-                  maxWidth='100vw'
-                   minHeight='93vh'
-                    maxHeight='93vh'
-                     editable={!isMentor}
-                      theme={isDark 
-                             ? 'dark'
-                             : 'light'
-                      }
-                       extensions={[javascript({ jsx: true })]}
-                        onChange={handleChange} />
-          }
-        </Box>
-      </Center>
-    </Box>
+          </Box>
+        </Center>
+      </Box>
     </>
   );
 }
 
 export default CodeBlock;
-
-//        : <Editor height='75vh' bg='gray.100' defaultLanguage='javascript' options={{readOnly:isMentor}} value={codeblock.currentCode} onChange={handleChange}/>

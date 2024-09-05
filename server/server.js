@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import CodeBlock from './model/CodeBlock.js';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { connectDB } from './db.js'
+import { connectDB } from './db.js';
 
 dotenv.config();
 const app = express();
@@ -17,28 +17,29 @@ var numOfParticipants = 0;
 
 connectDB();
 
+// Get a list of codeblocks from database
 app.get('/', async (req, res) => {
   const codeblocks = await CodeBlock.find();
   res.send(codeblocks);
 });
 
+// Get codeblock by ID from the database
 app.get('/codeblock/:id', async (req, res) => {
   codeBlock = codeBlock ?? await CodeBlock.findById(req.params.id);
   console.log(codeBlock);
   res.send(codeBlock);
 });
 
+// Handling various events triggered from the client side
 io.on('connection', (socket) => {
-  console.log(`a user connected ${socket.id}`);
+  console.log(`User ${socket.id} connected`);
   socket.emit('updateRole', (numOfParticipants === 0));
   numOfParticipants++;
   io.emit('updateNumOfParticipents', numOfParticipants);
 
-  socket.on('updateCodeInServer', (data) => {
-    console.log(data.currentCode);
-    console.log(codeBlock.solutionCode);
+  socket.on('codeBlockChanged', (data) => {
     (data.currentCode === codeBlock.solutionCode) && io.emit('updateIsMatch');
-    socket.broadcast.emit('updateCodeInClient', data);
+    socket.broadcast.emit('updateCodeBlock', data);
     codeBlock.currentCode = data.currentCode;
   });
 
@@ -50,7 +51,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log(`User ${socket.id} disconnected`);
     numOfParticipants--;
     io.emit('updateNumOfParticipents', numOfParticipants);
   });

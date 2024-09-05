@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose"
+import { Schema, model } from "mongoose";
 
 const codeBlockModel = new Schema(
     {
@@ -6,7 +6,7 @@ const codeBlockModel = new Schema(
         currentCode: {type:String},
         solutionCode: {type:String}
     },
-)
+);
 
-const CodeBlock = model("CodeBlock", codeBlockModel)
+const CodeBlock = model("CodeBlock", codeBlockModel);
 export default CodeBlock;

@@ -41,7 +41,7 @@ const Lobby = () => {
           </div>
         </Center>
         <Center bg='white' w='35%'>
-          <Image src='https://i.ibb.co/mJrHwFg/logo.jpg'/>
+          <Image src='/logo.jpg'/>
         </Center>
       </Flex>
     </div>
