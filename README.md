@@ -17,7 +17,7 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Technologies](#technologies)
-- [Lets try it](#lets-try-it)
+- [Depolyment](#depolyment)
 
 ## Introduction
 
@@ -28,8 +28,9 @@ An interactive tool that facilitates collaborative coding between mentors and st
 A few of the things you can do with Online Code Web App:
 
 * Choose from a variety of rooms designed for JavaScript coding
-* Real-time collaborative editing
+* Real-time collaborative code editing
 * Syntax highlighting for enhanced code readability
+* Choose your preferred code editor theme (light/dark)
 
 ## Technologies
 
@@ -42,6 +43,11 @@ This real-time JavaScript collaboration app leverages a robust tech stack to emp
 * **Styling**: Chakra UI - creating a beautiful and customizable user experience.
 * **Code Editing**: uiw/react-codemirror - integrating a powerful and familiar code editing experience.
 
-## Lets try it
-Follow this [link](https://onlinecodewebapp.netlify.app/) to begin your app experience
+## Depolyment
+* Frontend is deployed via Netlify
+* Backend is deployed via Render
+  
+Try the app today using this [link](https://onlinecodewebapp.netlify.app/)
+
+Note: When you first connect to the app, you might not see the available rooms. This is because the server is "sleeping". Please wait about a minute and try connecting again.
 
